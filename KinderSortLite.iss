@@ -5,7 +5,7 @@
 ; Setup program basic information
 AppName=KinderSortLite
 AppVersion=1.0
-AppPublisher=Your Team Name
+AppPublisher=Group 3
 AppPublisherURL=https://github.com/lerlerchan/KinderSort
 AppSupportURL=https://github.com/lerlerchan/KinderSort
 AppUpdatesURL=https://github.com/lerlerchan/KinderSort
@@ -20,7 +20,7 @@ OutputBaseFilename=KinderSortLiteSetup
 Compression=lzma2
 SolidCompression=yes
 ; Setup icon
-SetupIconFile=icon.ico
+;SetupIconFile=icon.ico
 ; Uninstall information
 UninstallDisplayIcon={app}\KinderSortLite.exe
 
@@ -31,10 +31,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-; Copy all files from PyInstaller's dist folder to installation directory
-Source: "dist\KinderSortLite.exe"; DestDir: "{app}"; Flags: ignoreversion
-; If there are other dependencies (.dll, .pyd), copy them as well
-; Source: "dist\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+; Copy ALL files from dist\main\ folder (including models!)
+Source: "dist\main\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{group}\KinderSortLite"; Filename: "{app}\KinderSortLite.exe"
