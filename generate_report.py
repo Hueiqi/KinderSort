@@ -1,6 +1,6 @@
 import os
 from docx import Document
-from docx.shared import Inches
+from docx.shared import Inches, Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from pathlib import Path
 
@@ -58,8 +58,9 @@ def generate_student_report(output_folder, report_path="Student_Report.docx"):
                 # Set image width to 1.5 inches for neat grid
                 run = cell.paragraphs[0].add_run()
                 run.add_picture(str(img_path), width=Inches(1.5))
+                # Add filename below image (optional)
                 cell.paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.CENTER
-            except Exception:
+            except Exception as e:
                 cell.text = f"[Error: {os.path.basename(img_path)}]"
         
         doc.add_paragraph()  # Add blank line between students

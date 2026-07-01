@@ -1,9 +1,29 @@
+import sys
+import os
+
+# ========== CRITICAL FIX FOR PyInstaller ==========
+# Force face_recognition to use the installed models folder
+if getattr(sys, 'frozen', False):
+    # Running as a bundled executable
+    base_path = os.path.dirname(sys.executable)
+    models_path = os.path.join(base_path, 'face_recognition_models')
+    if os.path.exists(models_path):
+        # Override the package path BEFORE any imports
+        import face_recognition_models
+        face_recognition_models.__path__ = [models_path]
+        print(f"[INFO] Models loaded from: {models_path}")
+    else:
+        print(f"[WARNING] Models folder not found at: {models_path}")
+# ==================================================
+
 """
 main.py — KinderSort GUI entry point.
 
 Single-window tkinter application that drives the PhotoSorter pipeline with a
 background thread so the UI remains responsive during processing.
 """
+
+
 
 import threading
 import time
