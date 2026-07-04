@@ -1,6 +1,8 @@
 import sys
 import os
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 # ========== CRITICAL FIX FOR PyInstaller ==========
 # Force face_recognition to use the installed models folder
 if getattr(sys, 'frozen', False):
