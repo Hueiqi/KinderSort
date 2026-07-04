@@ -23,8 +23,6 @@ Single-window tkinter application that drives the PhotoSorter pipeline with a
 background thread so the UI remains responsive during processing.
 """
 
-
-
 import threading
 import time
 import tkinter as tk
@@ -33,6 +31,9 @@ from tkinter import filedialog, messagebox, ttk
 
 from sorter import PhotoSorter
 from utils import setup_logger
+
+# ========== IMPORT SPLASH SCREEN  ==========
+from splash_screen import SplashScreen
 
 
 class KinderSortApp(tk.Tk):
@@ -90,7 +91,7 @@ class KinderSortApp(tk.Tk):
 
         folders_frame.columnconfigure(1, weight=1)
 
-        # Start / Cancel buttons
+        # Start / Cancel / Export Report buttons (TASK 6 BONUS)
         btn_frame = tk.Frame(root_frame)
         btn_frame.pack(fill=tk.X, pady=(0, 12))
 
@@ -118,6 +119,21 @@ class KinderSortApp(tk.Tk):
             command=self._on_cancel,
         )
         self._cancel_btn.pack(side=tk.LEFT)
+
+        # === EXPORT REPORT BUTTON  ===
+        self._report_btn = tk.Button(
+            btn_frame,
+            text="Export Report",
+            font=("Helvetica", 11),
+            bg="#2196F3",
+            fg="white",
+            activebackground="#1976D2",
+            activeforeground="white",
+            padx=16,
+            pady=8,
+            command=self._on_export_report,
+        )
+        self._report_btn.pack(side=tk.LEFT, padx=(0, 8))
 
         # Progress section
         self._build_progress_section(root_frame)
@@ -319,6 +335,27 @@ class KinderSortApp(tk.Tk):
         self._set_status("Cancelling… (finishing current image)")
 
     # ------------------------------------------------------------------
+    # EXPORT REPORT
+    # ------------------------------------------------------------------
+
+    def _on_export_report(self) -> None:
+        """Export a Word report with all sorted student photos."""
+        output = self._output_var.get().strip()
+        if not output:
+            messagebox.showerror("Error", "Please select an Output folder first.")
+            return
+
+        try:
+            from generate_report import generate_student_report
+            report_path = Path(output) / "Student_Report.docx"
+            generate_student_report(output, str(report_path))
+            messagebox.showinfo("Success", f"Report saved to:\n{report_path}")
+        except ImportError:
+            messagebox.showerror("Error", "Report generator not found.")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to generate report: {e}")
+
+    # ------------------------------------------------------------------
     # Cross-thread callbacks (all scheduled via after() from worker)
     # ------------------------------------------------------------------
 
@@ -396,6 +433,15 @@ class KinderSortApp(tk.Tk):
 
 def main() -> None:
     """Launch the KinderSort GUI application."""
+    # === SPLASH SCREEN  ===
+    splash = SplashScreen()
+    splash.update_status("Initializing...")
+    time.sleep(1)
+    splash.update_status("Loading face recognition models...")
+    time.sleep(1)
+    splash.close()
+    # === END SPLASH SCREEN ===
+
     app = KinderSortApp()
     app.mainloop()
 
