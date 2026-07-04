@@ -143,3 +143,18 @@ python main.py
 pyinstaller --onefile --windowed --name "KinderSort" main.py
 # 输出：dist/KinderSort.exe
 ```
+## Installation (Windows)
+
+1. Download `KinderSortLiteSetup.exe` from the [Releases](https://github.com/YOUR_USERNAME/KinderSort/releases) page.
+2. Double-click the installer.
+3. Follow the on-screen instructions.
+4. Launch KinderSort Lite from your Desktop or Start Menu.
+
+**System Requirements:**
+- Windows 10 or Windows 11
+- 4GB RAM minimum
+- No GPU required (CPU-only)
+
+## Offline Mode
+
+KinderSort Lite works **completely offline**. No internet connection is required.

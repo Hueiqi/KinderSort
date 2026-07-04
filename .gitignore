@@ -13,3 +13,21 @@ WinInstaller/
 *.exe
 /Issues
 .claude/worktrees/vigorous-hellman/
+
+# Photos and media
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.gif
+*.webp
+
+# Output and logs
+output/
+event/
+*.log
+
+# PyInstaller temp
+build/
+dist/
+*.spec
