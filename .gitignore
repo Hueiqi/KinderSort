@@ -31,3 +31,6 @@ event/
 build/
 dist/
 *.spec
+
+# Release files (hosted on GitHub Releases)
+release/*.exe
