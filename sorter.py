@@ -275,4 +275,4 @@ class PhotoSorter:
         if min_distance <= self.DISTANCE_THRESHOLD:
             return best_match_student
 
-        return None
+        return None 
