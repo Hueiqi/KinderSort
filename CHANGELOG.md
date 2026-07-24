@@ -12,7 +12,7 @@
 
 ### Optimized
 - Image resizing for low-RAM devices
-- Memory usage reduced by 60%
+- Memory usage reduced by 80%
 
 ### Fixed
 - Face recognition models now bundled correctly
