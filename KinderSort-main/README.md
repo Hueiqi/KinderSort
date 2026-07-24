@@ -135,6 +135,9 @@ python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 python main.py
+
+py -m pip install "setuptools<70.0.0"
+#run this if setuptools failed
 ```
 
 Build Windows executable:
@@ -143,5 +146,4 @@ Build Windows executable:
 pyinstaller --onefile --windowed --name "KinderSort" main.py
 # Output: dist/KinderSort.exe
 ```
-//run this if failed with setuptools
-py -m pip install "setuptools<70.0.0"
+
