@@ -18,3 +18,4 @@
 - Face recognition models now bundled correctly
 - Inno Setup copies all dependencies
 - PyInstaller configuration includes all hidden imports
+- Resolved the "Not Responding" issue caused by the application taking too long to process.
