@@ -8,6 +8,7 @@
 - Word report generator (python-docx)
 - Full offline operation
 - CPU-only support (no GPU required)
+- Added benchmark.py for monitoring
 
 ### Optimized
 - Image resizing for low-RAM devices
