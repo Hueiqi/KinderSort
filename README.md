@@ -147,3 +147,4 @@ pyinstaller --onefile --windowed --name "KinderSort" main.py
 # Output: dist/KinderSort.exe
 ```
 
+#update on 2026/7/24
