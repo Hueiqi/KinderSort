@@ -143,3 +143,5 @@ Build Windows executable:
 pyinstaller --onefile --windowed --name "KinderSort" main.py
 # Output: dist/KinderSort.exe
 ```
+//run this if failed with setuptools
+py -m pip install "setuptools<70.0.0"
