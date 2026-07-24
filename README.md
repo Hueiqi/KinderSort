@@ -135,6 +135,9 @@ python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 python main.py
+
+py -m pip install "setuptools<70.0.0"
+#run this if setuptools failed
 ```
 
 Build Windows executable:
@@ -143,18 +146,4 @@ Build Windows executable:
 pyinstaller --onefile --windowed --name "KinderSort" main.py
 # Output: dist/KinderSort.exe
 ```
-## Installation (Windows)
 
-1. Download `KinderSortLiteSetup.exe` from the [Releases](https://github.com/YOUR_USERNAME/KinderSort/releases) page.
-2. Double-click the installer.
-3. Follow the on-screen instructions.
-4. Launch KinderSort Lite from your Desktop or Start Menu.
-
-**System Requirements:**
-- Windows 10 or Windows 11
-- 4GB RAM minimum
-- No GPU required (CPU-only)
-
-## Offline Mode
-
-KinderSort Lite works **completely offline**. No internet connection is required.
