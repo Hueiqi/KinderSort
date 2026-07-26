@@ -94,12 +94,17 @@ def build_output_filename(event_name: str, original_filename: str) -> str:
     return f"{event_name}__{original_filename}"
 
 
-def safe_copy(src: Path, dest_folder: Path, filename: str, logger: logging.Logger) -> Path:
+def safe_copy(
+    src: Path, dest_folder: Path, filename: str, logger: logging.Logger | None = None
+) -> Path:
     """Copy src to dest_folder/filename using shutil.copy2 (preserves metadata).
 
     If a file with the same name already exists in dest_folder, appends _2, _3,
     … before the extension until a free name is found.  Creates dest_folder if
     it does not exist.
+
+    Logging is optional so callers that run without a logger do not fail after
+    the copy has already happened.
 
     Returns the final destination path.
     """
@@ -115,5 +120,6 @@ def safe_copy(src: Path, dest_folder: Path, filename: str, logger: logging.Logge
         counter += 1
 
     shutil.copy2(src, dest_path)
-    logger.debug("Copied %s → %s", src.name, dest_path)
+    if logger:
+        logger.debug("Copied %s → %s", src.name, dest_path)
     return dest_path
