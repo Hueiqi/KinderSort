@@ -1,46 +1,68 @@
 import os
 import subprocess
 import sys
+import shutil
+from PyInstaller.utils.hooks import collect_data_files
 
-class InstallerBuilder:
-    """
-    KinderSort Lite - Automated Windows Installer & Executable Packaging Tool
-    Author: LimJiaLe2006 (Member 4)
-    Purpose: Packages KinderSort Lite into a standalone .exe and release folder structure.
-    """
+def build_exe():
+    print("==================================================")
+    print("  KinderSort Lite - Executable Packaging Tool")
+    print("==================================================")
 
-    def __init__(self, main_script="ai_engine.py", output_dir="release"):
-        self.main_script = main_script
-        self.output_dir = output_dir
+    release_dir = os.path.join(os.getcwd(), "release")
+    if os.path.exists(release_dir):
+        shutil.rmtree(release_dir)
+    os.makedirs(release_dir, exist_ok=True)
 
-    def create_release_directory(self):
-        """Creates the mandatory /release directory for submission requirements."""
-        if not os.path.exists(self.output_dir):
-            os.makedirs(self.output_dir)
-            print(f"[BUILD] Created release directory: {self.output_dir}")
+    main_script = "main.py"
+    if not os.path.exists(main_script):
+        print(f"[ERROR] Entrance script '{main_script}' not found!")
+        return
 
-    def run_pyinstaller_build(self):
-        """Executes PyInstaller build command for standalone Windows execution."""
-        print("[BUILD] Compiling standalone executable for Windows 10/11...")
-        cmd = [
-            "pyinstaller",
-            "--noconfirm",
-            "--onedir",
-            "--windowed",
-            f"--distpath={self.output_dir}",
-            self.main_script
-        ]
+    # 1. 自动收集 face_recognition_models 所需的 .dat 权重/模型文件
+    datas = collect_data_files('face_recognition_models')
+    
+    # 构造 --add-data 参数
+    add_data_args = []
+    for src, dst in datas:
+        add_data_args.extend(["--add-data", f"{src};{dst}"])
+
+    # 2. 构造 PyInstaller 编译命令
+    cmd = [
+        sys.executable, "-m", "PyInstaller",
+        "--noconfirm",
+        "--onedir",                       # 采用文件夹模式打包
+        "--windowed",                     # 隐藏控制台黑框
+        "--name=KinderSortLiteSetup",
+        "--hidden-import=PIL._tkinter_finder",
+        "--hidden-import=cv2",
+        "--hidden-import=face_recognition",
+        "--hidden-import=face_recognition_models",
+        "--hidden-import=dlib",
+        "--hidden-import=sorter",
+        "--hidden-import=utils",
+    ] + add_data_args + [
+        f"--distpath={release_dir}",
+        main_script
+    ]
+
+    print("[BUILD] Running PyInstaller with face_recognition model binaries...\n")
+    
+    try:
+        subprocess.run(cmd, check=True)
+        exe_dir = os.path.join(release_dir, "KinderSortLiteSetup")
+        exe_path = os.path.join(exe_dir, "KinderSortLiteSetup.exe")
         
-        try:
-            # Simulate or trigger PyInstaller process
-            print(f"[BUILD COMMAND] {' '.join(cmd)}")
-            print("[SUCCESS] Build process configured for standalone offline execution.")
-            return True
-        except Exception as e:
-            print(f"[ERROR] Build failed: {e}")
-            return False
+        if os.path.exists(exe_path):
+            print("\n==================================================")
+            print("  🎉 SUCCESS! Executable built successfully!")
+            print(f"  📂 Executable Location: {exe_path}")
+            print("==================================================")
+        else:
+            print("\n[WARNING] Build finished but .exe file not found.")
+            
+    except Exception as e:
+        print(f"\n[ERROR] Build failed: {e}")
 
 if __name__ == "__main__":
-    builder = InstallerBuilder()
-    builder.create_release_directory()
-    builder.run_pyinstaller_build()
+    build_exe()
