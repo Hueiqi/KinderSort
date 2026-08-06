@@ -32,7 +32,7 @@ from tkinter import filedialog, messagebox, ttk
 from sorter import PhotoSorter
 from utils import setup_logger
 
-# ========== IMPORT SPLASH SCREEN ==========
+# ========== IMPORT SPLASH SCREEN  ==========
 from splash_screen import SplashScreen
 
 
@@ -43,267 +43,289 @@ class KinderSortApp(tk.Tk):
     MIN_HEIGHT = 400
 
     def __init__(self) -> None:
+        """Initialise the window, build all widgets, and configure layout."""
         super().__init__()
-
-        self.title("KinderSort Lite — AI Student Photo Organiser")
+        self.title("KinderSort v1.1 — Student Photo Organiser")
         self.minsize(self.MIN_WIDTH, self.MIN_HEIGHT)
+        self.resizable(True, True)
 
-        # Pipeline state tracking
-        self._sorter_thread: threading.Thread | None = None
-        self._is_running = False
-
-        # UI StringVariables
-        self._ref_var = tk.StringVar()
+        # StringVars for the three folder paths
+        self._reference_var = tk.StringVar()
         self._events_var = tk.StringVar()
         self._output_var = tk.StringVar()
 
+        # Cancellation flag shared between GUI and worker thread
+        self._cancel_flag = threading.Event()
+
+        # Spinner / elapsed timer state
+        self._spinner_frames = ["🕐", "🕑", "🕒", "🕓", "🕔", "🕕", "🕖", "🕗", "🕘", "🕙", "🕚", "🕛"]
+        self._spinner_idx = 0
+        self._sort_start_time: float | None = None
+        self._ticker_id: str | None = None
+
         self._build_ui()
-        self.protocol("WM_DELETE_WINDOW", self._on_close)
 
     # ------------------------------------------------------------------
-    # UI Layout Construction
+    # Widget construction
     # ------------------------------------------------------------------
 
     def _build_ui(self) -> None:
-        """Construct the Tkinter layout components."""
-        main_frame = ttk.Frame(self, padding="15")
-        main_frame.pack(fill=tk.BOTH, expand=True)
+        """Build and pack all widgets into the main window."""
+        root_frame = tk.Frame(self, padx=16, pady=16)
+        root_frame.pack(fill=tk.BOTH, expand=True)
 
-        # Header section
-        header_label = ttk.Label(
-            main_frame,
-            text="KinderSort Lite",
-            font=("Segoe UI", 16, "bold"),
-        )
-        header_label.pack(anchor=tk.W, pady=(0, 2))
+        # Title label
+        tk.Label(
+            root_frame,
+            text="KinderSort — Student Photo Organiser",
+            font=("Helvetica", 14, "bold"),
+        ).pack(anchor="w", pady=(0, 12))
 
-        sub_label = ttk.Label(
-            main_frame,
-            text="AI-powered offline student photo sorter for educators.",
-            font=("Segoe UI", 9, "italic"),
-        )
-        sub_label.pack(anchor=tk.W, pady=(0, 15))
+        # Folder selector rows
+        folders_frame = tk.LabelFrame(root_frame, text="Folders", padx=8, pady=8)
+        folders_frame.pack(fill=tk.X, pady=(0, 12))
 
-        # Folder selection form
-        form_frame = ttk.LabelFrame(main_frame, text=" Folder Selection ", padding="10")
-        form_frame.pack(fill=tk.X, pady=(0, 10))
+        self._build_folder_row(folders_frame, "Reference Photos:", self._reference_var, 0)
+        self._build_folder_row(folders_frame, "Events Folder:", self._events_var, 1)
+        self._build_folder_row(folders_frame, "Output Folder:", self._output_var, 2)
 
-        form_frame.columnconfigure(1, weight=1)
+        folders_frame.columnconfigure(1, weight=1)
 
-        # Row 0: Reference Photos
-        ttk.Label(form_frame, text="Reference Folder:").grid(
-            row=0, column=0, sticky=tk.W, pady=4, padx=(0, 8)
-        )
-        ttk.Entry(form_frame, textvariable=self._ref_var).grid(
-            row=0, column=1, sticky=tk.EW, pady=4
-        )
-        ttk.Button(
-            form_frame, text="Browse...", command=self._browse_ref
-        ).grid(row=0, column=2, pady=4, padx=(8, 0))
+        # Start / Cancel / Export Report buttons
+        btn_frame = tk.Frame(root_frame)
+        btn_frame.pack(fill=tk.X, pady=(0, 12))
 
-        # Row 1: Event Photos
-        ttk.Label(form_frame, text="Events Folder:").grid(
-            row=1, column=0, sticky=tk.W, pady=4, padx=(0, 8)
-        )
-        ttk.Entry(form_frame, textvariable=self._events_var).grid(
-            row=1, column=1, sticky=tk.EW, pady=4
-        )
-        ttk.Button(
-            form_frame, text="Browse...", command=self._browse_events
-        ).grid(row=1, column=2, pady=4, padx=(8, 0))
-
-        # Row 2: Output Destination
-        ttk.Label(form_frame, text="Output Folder:").grid(
-            row=2, column=0, sticky=tk.W, pady=4, padx=(0, 8)
-        )
-        ttk.Entry(form_frame, textvariable=self._output_var).grid(
-            row=2, column=1, sticky=tk.EW, pady=4
-        )
-        ttk.Button(
-            form_frame, text="Browse...", command=self._browse_output
-        ).grid(row=2, column=2, pady=4, padx=(8, 0))
-
-        # Controls section
-        ctrl_frame = ttk.Frame(main_frame)
-        ctrl_frame.pack(fill=tk.X, pady=(0, 10))
-
-        self._start_btn = ttk.Button(
-            ctrl_frame, text="Start Sorting", command=self._start_sorting
+        self._start_btn = tk.Button(
+            btn_frame,
+            text="Start Sorting",
+            font=("Helvetica", 11, "bold"),
+            bg="#4CAF50",
+            fg="white",
+            activebackground="#388E3C",
+            activeforeground="white",
+            padx=16,
+            pady=8,
+            command=self._on_start,
         )
         self._start_btn.pack(side=tk.LEFT, padx=(0, 8))
 
-        self._cancel_btn = ttk.Button(
-            ctrl_frame,
+        self._cancel_btn = tk.Button(
+            btn_frame,
             text="Cancel",
-            command=self._cancel_sorting,
+            font=("Helvetica", 11),
+            padx=16,
+            pady=8,
             state=tk.DISABLED,
+            command=self._on_cancel,
         )
-        self._cancel_btn.pack(side=tk.LEFT, padx=(0, 8))
+        self._cancel_btn.pack(side=tk.LEFT)
 
-        self._export_btn = ttk.Button(
-            ctrl_frame, text="Export Report", command=self._on_export_report
+        # EXPORT REPORT BUTTON
+        self._report_btn = tk.Button(
+            btn_frame,
+            text="Export Report",
+            font=("Helvetica", 11),
+            bg="#2196F3",
+            fg="white",
+            activebackground="#1976D2",
+            activeforeground="white",
+            padx=16,
+            pady=8,
+            command=self._on_export_report,
         )
-        self._export_btn.pack(side=tk.RIGHT)
+        self._report_btn.pack(side=tk.LEFT, padx=(0, 8))
 
-        # Status & Progress Display
-        progress_frame = ttk.Frame(main_frame)
-        progress_frame.pack(fill=tk.X, pady=(0, 10))
+        # Progress section
+        self._build_progress_section(root_frame)
 
+        # Summary box
+        self._build_summary_box(root_frame)
+
+    def _build_folder_row(
+        self,
+        parent: tk.Widget,
+        label_text: str,
+        string_var: tk.StringVar,
+        row: int,
+    ) -> None:
+        """Create a label + read-only entry + browse button row inside parent."""
+        tk.Label(parent, text=label_text, anchor="w").grid(
+            row=row, column=0, sticky="w", padx=(0, 8), pady=4
+        )
+
+        entry = tk.Entry(parent, textvariable=string_var, state="readonly", width=40)
+        entry.grid(row=row, column=1, sticky="ew", pady=4)
+
+        btn = tk.Button(
+            parent,
+            text="Browse…",
+            command=lambda v=string_var: self._browse_folder(v),
+        )
+        btn.grid(row=row, column=2, padx=(8, 0), pady=4)
+
+    def _build_progress_section(self, parent: tk.Widget) -> None:
+        """Build the progress bar and status label."""
+        progress_frame = tk.LabelFrame(parent, text="Progress", padx=8, pady=8)
+        progress_frame.pack(fill=tk.X, pady=(0, 12))
+
+        self._progress_var = tk.DoubleVar(value=0.0)
         self._progress_bar = ttk.Progressbar(
-            progress_frame, mode="determinate"
+            progress_frame,
+            variable=self._progress_var,
+            maximum=100,
+            mode="determinate",
         )
         self._progress_bar.pack(fill=tk.X, pady=(0, 4))
 
-        self._status_label = ttk.Label(
-            progress_frame, text="Ready.", font=("Segoe UI", 9)
+        self._status_label = tk.Label(
+            progress_frame, text="Ready.", anchor="w", wraplength=460
         )
-        self._status_label.pack(anchor=tk.W)
+        self._status_label.pack(fill=tk.X)
 
-        # Processing Summary Area
-        summary_frame = ttk.LabelFrame(main_frame, text=" Summary ", padding="10")
+        self._timer_label = tk.Label(
+            progress_frame, text="", anchor="w", fg="#555555"
+        )
+        self._timer_label.pack(fill=tk.X)
+
+    def _build_summary_box(self, parent: tk.Widget) -> None:
+        """Build the read-only summary text box shown after completion."""
+        summary_frame = tk.LabelFrame(parent, text="Summary", padx=8, pady=8)
         summary_frame.pack(fill=tk.BOTH, expand=True)
 
         self._summary_text = tk.Text(
-            summary_frame,
-            height=6,
-            wrap=tk.WORD,
-            state=tk.DISABLED,
-            font=("Consolas", 9),
+            summary_frame, height=5, state=tk.DISABLED, wrap=tk.WORD
         )
         self._summary_text.pack(fill=tk.BOTH, expand=True)
 
     # ------------------------------------------------------------------
-    # Folder Dialog Handlers
+    # Event handlers
     # ------------------------------------------------------------------
 
-    def _browse_ref(self) -> None:
-        path = filedialog.askdirectory(title="Select Student Reference Folder")
-        if path:
-            self._ref_var.set(path)
+    def _browse_folder(self, string_var: tk.StringVar) -> None:
+        """Open a directory chooser and update string_var with the selection."""
+        folder = filedialog.askdirectory(title="Select folder")
+        if folder:
+            string_var.set(folder)
 
-    def _browse_events(self) -> None:
-        path = filedialog.askdirectory(title="Select Event Photos Folder")
-        if path:
-            self._events_var.set(path)
-
-    def _browse_output(self) -> None:
-        path = filedialog.askdirectory(title="Select Output Destination Folder")
-        if path:
-            self._output_var.set(path)
-
-    # ------------------------------------------------------------------
-    # Pipeline Thread Control
-    # ------------------------------------------------------------------
-
-    def _start_sorting(self) -> None:
-        ref = self._ref_var.get().strip()
+    def _on_start(self) -> None:
+        """Validate inputs then launch the worker thread for all heavy work."""
+        ref = self._reference_var.get().strip()
         events = self._events_var.get().strip()
         output = self._output_var.get().strip()
 
         if not ref or not events or not output:
-            messagebox.showerror("Error", "Please select all three folders before starting.")
-            return
-
-        ref_path, events_path, output_path = Path(ref), Path(events), Path(output)
-
-        if not ref_path.is_dir():
-            messagebox.showerror("Error", f"Reference folder does not exist:\n{ref}")
-            return
-        if not events_path.is_dir():
-            messagebox.showerror("Error", f"Events folder does not exist:\n{events}")
-            return
-
-        self._is_running = True
-        self._start_btn.config(state=tk.DISABLED)
-        self._cancel_btn.config(state=tk.NORMAL)
-        self._progress_bar["value"] = 0
-        self._clear_summary()
-        self._set_status("Initializing AI engine...")
-
-        self._sorter_thread = threading.Thread(
-            target=self._run_pipeline,
-            args=(ref_path, events_path, output_path),
-            daemon=True,
-        )
-        self._sorter_thread.start()
-
-    def _run_pipeline(self, ref_path: Path, events_path: Path, output_path: Path) -> None:
-        start_time = time.time()
-        logger = setup_logger(output_path / "kindersort.log")
-
-        def progress_cb(current: int, total: int) -> None:
-            if total > 0:
-                pct = (current / total) * 100
-                self.after(0, self._update_progress, pct, f"Processing photo {current} of {total}...")
-
-        try:
-            sorter = PhotoSorter(
-                reference_folder=ref_path,
-                events_folder=events_path,
-                output_folder=output_path,
-                logger=logger,
+            messagebox.showerror(
+                "Missing folders",
+                "Please select all three folders before starting.",
             )
+            return
 
-            self.after(0, self._set_status, "Loading student reference embeddings...")
-            num_students = sorter.load_references()
+        ref_path = Path(ref)
+        events_path = Path(events)
+        output_path = Path(output)
 
-            if num_students == 0:
-                self.after(
-                    0,
-                    self._on_pipeline_error,
-                    "No valid student reference images found.",
-                )
+        for path, name in [(ref_path, "Reference"), (events_path, "Events")]:
+            if not path.is_dir():
+                messagebox.showerror("Invalid folder", f"{name} folder does not exist:\n{path}")
                 return
 
-            self.after(0, self._set_status, f"Loaded {num_students} student profiles. Sorting event photos...")
-            counts = sorter.sort_events(progress_callback=progress_cb)
+        # Ensure output folder is creatable / writable
+        try:
+            output_path.mkdir(parents=True, exist_ok=True)
+        except OSError as exc:
+            messagebox.showerror("Output folder error", f"Cannot create output folder:\n{exc}")
+            return
 
-            elapsed = time.time() - start_time
-            mins, secs = divmod(int(elapsed), 60)
-            formatted_time = f"{mins:02d}:{secs:02d}"
+        # Disable start, enable cancel before launching thread
+        self._start_btn.config(state=tk.DISABLED)
+        self._cancel_btn.config(state=tk.NORMAL)
+        self._cancel_flag.clear()
+        self._clear_summary()
+        self._progress_var.set(0)
+        self._set_status("Loading reference photos…")
+        self._start_ticker()
 
-            summary_msg = (
-                f"Sorting completed in {formatted_time}.\n\n"
-                f"  Total Photos Processed: {counts['total']}\n"
-                f"  Photos Matched:          {counts['matched']}\n"
-                f"  Unmatched Photos:        {counts['unmatched']}\n"
-                f"  Skipped Files:          {counts['skipped']}\n"
+        logger = setup_logger(output_path)
+        sorter = PhotoSorter(ref_path, events_path, output_path, logger)
+
+        thread = threading.Thread(
+            target=self._run_sorting, args=(sorter,), daemon=True
+        )
+        thread.start()
+
+    def _run_sorting(self, sorter: PhotoSorter) -> None:
+        """Worker thread: load references, then sort all photos."""
+        try:
+            skipped_names = sorter.load_references(
+                progress_callback=self._on_ref_progress
             )
+        except Exception as exc:  # noqa: BLE001
+            self.after(0, self._on_error, str(exc))
+            return
 
-            self.after(0, self._on_pipeline_done, summary_msg, formatted_time)
+        if skipped_names:
+            self.after(0, self._show_ref_warning, skipped_names)
 
-        except Exception as e:
-            self.after(0, self._on_pipeline_error, str(e))
+        if not sorter._student_encodings:
+            self.after(0, self._on_error, "No student faces could be loaded. Please check your Reference folder.")
+            return
 
-    def _cancel_sorting(self) -> None:
-        if self._is_running:
-            self._is_running = False
-            self._set_status("Cancelling operation...")
-            self._cancel_btn.config(state=tk.DISABLED)
+        try:
+            summary = sorter.sort_all(
+                progress_callback=self._on_progress,
+                cancelled=self._cancel_flag.is_set,
+            )
+            self.after(0, self._on_done, summary)
+        except Exception as exc:  # noqa: BLE001
+            self.after(0, self._on_error, str(exc))
 
-    def _update_progress(self, pct: float, status_text: str) -> None:
-        self._progress_bar["value"] = pct
-        self._status_label.config(text=status_text)
+    def _start_ticker(self) -> None:
+        """Start the spinning clock emoji and elapsed timer."""
+        self._sort_start_time = time.monotonic()
+        self._spinner_idx = 0
+        self._tick()
 
-    def _on_pipeline_done(self, summary_text: str, formatted_time: str) -> None:
-        self._is_running = False
-        self._start_btn.config(state=tk.NORMAL)
-        self._cancel_btn.config(state=tk.DISABLED)
-        self._progress_bar["value"] = 100
-        self._set_status("Complete.")
-        self._write_summary(summary_text)
+    def _tick(self) -> None:
+        """Update spinner and elapsed time every 250 ms."""
+        if self._sort_start_time is None:
+            return
+        elapsed = int(time.monotonic() - self._sort_start_time)
+        minutes, seconds = divmod(elapsed, 60)
+        spinner = self._spinner_frames[self._spinner_idx % len(self._spinner_frames)]
+        self._spinner_idx += 1
+        self._timer_label.config(text=f"{spinner}  {minutes:02d}:{seconds:02d} elapsed")
+        self._ticker_id = self.after(250, self._tick)
 
-        messagebox.showinfo(
-            "Sorting Complete",
-            f"Done in {formatted_time}!\nCheck output folder for results.",
+    def _stop_ticker(self, final_elapsed: int | None = None) -> None:
+        """Stop the spinner and show final elapsed time."""
+        if self._ticker_id:
+            self.after_cancel(self._ticker_id)
+            self._ticker_id = None
+        if final_elapsed is not None:
+            minutes, seconds = divmod(final_elapsed, 60)
+            self._timer_label.config(text=f"✅  Done in {minutes:02d}:{seconds:02d}")
+        else:
+            self._timer_label.config(text="")
+        self._sort_start_time = None
+
+    def _on_ref_progress(self, current: int, total: int, name: str) -> None:
+        """Called from worker thread after each reference photo is encoded."""
+        self.after(0, self._set_status, f"Loading references [{current}/{total}]: {name}…")
+
+    def _show_ref_warning(self, skipped_names: list[str]) -> None:
+        """Show warning dialog for reference photos with no detectable face."""
+        names_str = "\n".join(f"  • {n}" for n in skipped_names)
+        messagebox.showwarning(
+            "Reference photos without faces",
+            f"No face was detected in the reference photos for:\n\n{names_str}\n\n"
+            "These students will be skipped during sorting.",
         )
 
-    def _on_pipeline_error(self, error_msg: str) -> None:
-        self._is_running = False
-        self._start_btn.config(state=tk.NORMAL)
+    def _on_cancel(self) -> None:
+        """Signal the worker thread to stop after the current image."""
+        self._cancel_flag.set()
         self._cancel_btn.config(state=tk.DISABLED)
-        self._set_status("An error occurred during processing.")
-        messagebox.showerror("Execution Error", error_msg)
+        self._set_status("Cancelling… (finishing current image)")
 
     # ------------------------------------------------------------------
     # EXPORT REPORT
@@ -319,53 +341,98 @@ class KinderSortApp(tk.Tk):
         try:
             from generate_report import generate_student_report
             report_path = Path(output) / "Student_Report.docx"
-            
-            # Triggers export and custom success dialog
             generate_student_report(output, str(report_path), parent_window=self)
-            
         except ImportError:
-            messagebox.showerror("Error", "Report generator script (generate_report.py) not found.")
+            messagebox.showerror("Error", "Report generator not found.")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to generate report: {e}")
 
     # ------------------------------------------------------------------
-    # Window Life Cycle Handlers
+    # Cross-thread callbacks
     # ------------------------------------------------------------------
 
-    def _on_close(self) -> None:
-        if self._is_running:
-            if not messagebox.askyesno(
-                "Exit Confirmation",
-                "Sorting is still in progress. Are you sure you want to exit?",
-            ):
-                return
-        self.destroy()
+    def _on_progress(self, current: int, total: int, filename: str) -> None:
+        """Update progress bar and status label."""
+        self.after(0, self._apply_progress, current, total, filename)
+
+    def _apply_progress(self, current: int, total: int, filename: str) -> None:
+        """Apply progress update on main thread."""
+        pct = (current / total * 100) if total else 0
+        self._progress_var.set(pct)
+        self._set_status(f"[{current}/{total}] {filename}")
+
+    def _on_done(self, summary: dict[str, int]) -> None:
+        """Show summary and re-enable controls after successful completion."""
+        elapsed = int(time.monotonic() - self._sort_start_time) if self._sort_start_time else None
+        self._stop_ticker(final_elapsed=elapsed)
+        self._start_btn.config(state=tk.NORMAL)
+        self._cancel_btn.config(state=tk.DISABLED)
+        self._progress_var.set(100)
+
+        cancelled = self._cancel_flag.is_set()
+        status = "Sorting cancelled." if cancelled else "Sorting complete."
+        self._set_status(status)
+
+        lines = [
+            status,
+            "",
+            f"Total images found : {summary['total']}",
+            f"Matched (sorted)   : {summary['matched']}",
+            f"Unmatched          : {summary['unmatched']}",
+            f"Skipped (errors)   : {summary['skipped']}",
+        ]
+        self._write_summary("\n".join(lines))
+
+        if summary["total"] == 0:
+            messagebox.showwarning(
+                "No images found",
+                "No photos were found in the Events folder.\n\n"
+                "Make sure your Events folder contains photos (or sub-folders with photos).\n"
+                "Supported formats: .jpg  .jpeg  .png  .bmp  .webp",
+            )
+
+    def _on_error(self, message: str) -> None:
+        """Show an error dialog and re-enable controls."""
+        self._stop_ticker()
+        self._start_btn.config(state=tk.NORMAL)
+        self._cancel_btn.config(state=tk.DISABLED)
+        self._set_status("An error occurred.")
+        messagebox.showerror("Unexpected error", message)
+
+    # ------------------------------------------------------------------
+    # Widget helpers
+    # ------------------------------------------------------------------
 
     def _set_status(self, text: str) -> None:
+        """Update the status label text."""
         self._status_label.config(text=text)
 
     def _write_summary(self, text: str) -> None:
+        """Write text into the read-only summary box."""
         self._summary_text.config(state=tk.NORMAL)
         self._summary_text.delete("1.0", tk.END)
         self._summary_text.insert(tk.END, text)
         self._summary_text.config(state=tk.DISABLED)
 
     def _clear_summary(self) -> None:
+        """Clear the summary text box."""
         self._write_summary("")
 
 
 # ---------------------------------------------------------------------------
-# Application Main Entry Point
+# Entry point
 # ---------------------------------------------------------------------------
 
 def main() -> None:
     """Launch the KinderSort GUI application."""
+    # === SPLASH SCREEN ===
     splash = SplashScreen()
-    splash.update_status("Initializing engine...")
+    splash.update_status("Initializing...")
     time.sleep(1)
-    splash.update_status("Loading biometric face recognition models...")
+    splash.update_status("Loading face recognition models...")
     time.sleep(1)
     splash.close()
+    # === END SPLASH SCREEN ===
 
     app = KinderSortApp()
     app.mainloop()
