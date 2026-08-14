@@ -1,0 +1,140 @@
+2026-08-06 18:49:52 [INFO] Loaded reference vector for dzq
+2026-08-06 18:49:53 [INFO] Loaded reference vector for ljj
+2026-08-06 18:49:53 [INFO] Loaded reference vector for xzq
+2026-08-06 18:49:54 [INFO] Loaded reference vector for yl
+2026-08-06 18:49:56 [INFO] Loaded reference vector for zjl
+2026-08-06 18:49:56 [INFO] Starting High-Accuracy AI sort — 10 images found
+2026-08-06 18:49:56 [DEBUG] Copied dzq1event.png → F:\KinderSort\OutputNew\dzq\Event__dzq1event.png
+2026-08-06 18:49:56 [INFO] Matched dzq1event.png → dzq
+2026-08-06 18:49:56 [DEBUG] Copied dzq1event.png → F:\KinderSort\OutputNew\yl\Event__dzq1event.png
+2026-08-06 18:49:56 [INFO] Matched dzq1event.png → yl
+2026-08-06 18:49:57 [DEBUG] Copied dzq2event.png → F:\KinderSort\OutputNew\dzq\Event__dzq2event.png
+2026-08-06 18:49:57 [INFO] Matched dzq2event.png → dzq
+2026-08-06 18:49:58 [DEBUG] Copied ljj1event.png → F:\KinderSort\OutputNew\ljj\Event__ljj1event.png
+2026-08-06 18:49:58 [INFO] Matched ljj1event.png → ljj
+2026-08-06 18:49:59 [DEBUG] Copied ljj2event.png → F:\KinderSort\OutputNew\ljj\Event__ljj2event.png
+2026-08-06 18:49:59 [INFO] Matched ljj2event.png → ljj
+2026-08-06 18:50:00 [DEBUG] Copied xzq1event.png → F:\KinderSort\OutputNew\dzq\Event__xzq1event.png
+2026-08-06 18:50:00 [INFO] Matched xzq1event.png → dzq
+2026-08-06 18:50:00 [DEBUG] Copied xzq1event.png → F:\KinderSort\OutputNew\xzq\Event__xzq1event.png
+2026-08-06 18:50:00 [INFO] Matched xzq1event.png → xzq
+2026-08-06 18:50:00 [DEBUG] Copied xzq2event.png → F:\KinderSort\OutputNew\xzq\Event__xzq2event.png
+2026-08-06 18:50:00 [INFO] Matched xzq2event.png → xzq
+2026-08-06 18:50:03 [DEBUG] Copied yl1event.png → F:\KinderSort\OutputNew\dzq\Event__yl1event.png
+2026-08-06 18:50:03 [INFO] Matched yl1event.png → dzq
+2026-08-06 18:50:03 [DEBUG] Copied yl1event.png → F:\KinderSort\OutputNew\ljj\Event__yl1event.png
+2026-08-06 18:50:03 [INFO] Matched yl1event.png → ljj
+2026-08-06 18:50:03 [DEBUG] Copied yl1event.png → F:\KinderSort\OutputNew\yl\Event__yl1event.png
+2026-08-06 18:50:03 [INFO] Matched yl1event.png → yl
+2026-08-06 18:50:03 [DEBUG] Copied yl2event.png → F:\KinderSort\OutputNew\yl\Event__yl2event.png
+2026-08-06 18:50:03 [INFO] Matched yl2event.png → yl
+2026-08-06 18:50:04 [DEBUG] Copied zjl1event.png → F:\KinderSort\OutputNew\xzq\Event__zjl1event.png
+2026-08-06 18:50:04 [INFO] Matched zjl1event.png → xzq
+2026-08-06 18:50:04 [DEBUG] Copied zjl2event.png → F:\KinderSort\OutputNew\zjl\Event__zjl2event.png
+2026-08-06 18:50:04 [INFO] Matched zjl2event.png → zjl
+2026-08-06 18:50:04 [INFO] Sort complete — total=10 matched=10 unmatched=0 skipped=0
+2026-08-11 02:33:04 [INFO] Loaded reference vector for dzq
+2026-08-11 02:33:05 [INFO] Loaded reference vector for ljj
+2026-08-11 02:33:06 [INFO] Loaded reference vector for xzq
+2026-08-11 02:33:07 [INFO] Loaded reference vector for yl
+2026-08-11 02:33:09 [INFO] Loaded reference vector for zjl
+2026-08-11 02:33:09 [INFO] Starting High-Accuracy AI sort — 10 images found
+2026-08-11 02:33:09 [DEBUG] Copied dzq1event.png → F:\KinderSort\OutputNew\dzq\Event__dzq1event_2.png
+2026-08-11 02:33:09 [INFO] Matched dzq1event.png → dzq
+2026-08-11 02:33:09 [DEBUG] Copied dzq1event.png → F:\KinderSort\OutputNew\yl\Event__dzq1event_2.png
+2026-08-11 02:33:09 [INFO] Matched dzq1event.png → yl
+2026-08-11 02:33:10 [DEBUG] Copied dzq2event.png → F:\KinderSort\OutputNew\dzq\Event__dzq2event_2.png
+2026-08-11 02:33:10 [INFO] Matched dzq2event.png → dzq
+2026-08-11 02:33:10 [DEBUG] Copied ljj1event.png → F:\KinderSort\OutputNew\ljj\Event__ljj1event_2.png
+2026-08-11 02:33:10 [INFO] Matched ljj1event.png → ljj
+2026-08-11 02:33:11 [DEBUG] Copied ljj2event.png → F:\KinderSort\OutputNew\ljj\Event__ljj2event_2.png
+2026-08-11 02:33:11 [INFO] Matched ljj2event.png → ljj
+2026-08-11 02:33:12 [DEBUG] Copied xzq1event.png → F:\KinderSort\OutputNew\dzq\Event__xzq1event_2.png
+2026-08-11 02:33:12 [INFO] Matched xzq1event.png → dzq
+2026-08-11 02:33:12 [DEBUG] Copied xzq1event.png → F:\KinderSort\OutputNew\xzq\Event__xzq1event_2.png
+2026-08-11 02:33:12 [INFO] Matched xzq1event.png → xzq
+2026-08-11 02:33:13 [DEBUG] Copied xzq2event.png → F:\KinderSort\OutputNew\xzq\Event__xzq2event_2.png
+2026-08-11 02:33:13 [INFO] Matched xzq2event.png → xzq
+2026-08-11 02:33:15 [DEBUG] Copied yl1event.png → F:\KinderSort\OutputNew\dzq\Event__yl1event_2.png
+2026-08-11 02:33:15 [INFO] Matched yl1event.png → dzq
+2026-08-11 02:33:15 [DEBUG] Copied yl1event.png → F:\KinderSort\OutputNew\ljj\Event__yl1event_2.png
+2026-08-11 02:33:15 [INFO] Matched yl1event.png → ljj
+2026-08-11 02:33:15 [DEBUG] Copied yl1event.png → F:\KinderSort\OutputNew\yl\Event__yl1event_2.png
+2026-08-11 02:33:15 [INFO] Matched yl1event.png → yl
+2026-08-11 02:33:16 [DEBUG] Copied yl2event.png → F:\KinderSort\OutputNew\yl\Event__yl2event_2.png
+2026-08-11 02:33:16 [INFO] Matched yl2event.png → yl
+2026-08-11 02:33:16 [DEBUG] Copied zjl1event.png → F:\KinderSort\OutputNew\xzq\Event__zjl1event_2.png
+2026-08-11 02:33:16 [INFO] Matched zjl1event.png → xzq
+2026-08-11 02:33:17 [DEBUG] Copied zjl2event.png → F:\KinderSort\OutputNew\zjl\Event__zjl2event_2.png
+2026-08-11 02:33:17 [INFO] Matched zjl2event.png → zjl
+2026-08-11 02:33:17 [INFO] Sort complete — total=10 matched=10 unmatched=0 skipped=0
+2026-08-14 09:28:37 [INFO] Loaded reference vector for dzq
+2026-08-14 09:28:38 [INFO] Loaded reference vector for ljj
+2026-08-14 09:28:39 [INFO] Loaded reference vector for xzq
+2026-08-14 09:28:40 [INFO] Loaded reference vector for yl
+2026-08-14 09:28:41 [INFO] Loaded reference vector for zjl
+2026-08-14 09:28:41 [INFO] Starting High-Accuracy AI sort — 10 images found
+2026-08-14 09:28:42 [DEBUG] Copied dzq1event.png → F:\KinderSort\OutputNew\dzq\Event__dzq1event_3.png
+2026-08-14 09:28:42 [INFO] Matched dzq1event.png → dzq
+2026-08-14 09:28:42 [DEBUG] Copied dzq1event.png → F:\KinderSort\OutputNew\yl\Event__dzq1event_3.png
+2026-08-14 09:28:42 [INFO] Matched dzq1event.png → yl
+2026-08-14 09:28:43 [DEBUG] Copied dzq2event.png → F:\KinderSort\OutputNew\dzq\Event__dzq2event_3.png
+2026-08-14 09:28:43 [INFO] Matched dzq2event.png → dzq
+2026-08-14 09:28:43 [DEBUG] Copied ljj1event.png → F:\KinderSort\OutputNew\ljj\Event__ljj1event_3.png
+2026-08-14 09:28:43 [INFO] Matched ljj1event.png → ljj
+2026-08-14 09:28:44 [DEBUG] Copied ljj2event.png → F:\KinderSort\OutputNew\ljj\Event__ljj2event_3.png
+2026-08-14 09:28:44 [INFO] Matched ljj2event.png → ljj
+2026-08-14 09:28:45 [DEBUG] Copied xzq1event.png → F:\KinderSort\OutputNew\dzq\Event__xzq1event_3.png
+2026-08-14 09:28:45 [INFO] Matched xzq1event.png → dzq
+2026-08-14 09:28:45 [DEBUG] Copied xzq1event.png → F:\KinderSort\OutputNew\xzq\Event__xzq1event_3.png
+2026-08-14 09:28:45 [INFO] Matched xzq1event.png → xzq
+2026-08-14 09:28:45 [DEBUG] Copied xzq2event.png → F:\KinderSort\OutputNew\xzq\Event__xzq2event_3.png
+2026-08-14 09:28:45 [INFO] Matched xzq2event.png → xzq
+2026-08-14 09:28:47 [DEBUG] Copied yl1event.png → F:\KinderSort\OutputNew\dzq\Event__yl1event_3.png
+2026-08-14 09:28:47 [INFO] Matched yl1event.png → dzq
+2026-08-14 09:28:48 [DEBUG] Copied yl1event.png → F:\KinderSort\OutputNew\ljj\Event__yl1event_3.png
+2026-08-14 09:28:48 [INFO] Matched yl1event.png → ljj
+2026-08-14 09:28:48 [DEBUG] Copied yl1event.png → F:\KinderSort\OutputNew\yl\Event__yl1event_3.png
+2026-08-14 09:28:48 [INFO] Matched yl1event.png → yl
+2026-08-14 09:28:48 [DEBUG] Copied yl2event.png → F:\KinderSort\OutputNew\yl\Event__yl2event_3.png
+2026-08-14 09:28:48 [INFO] Matched yl2event.png → yl
+2026-08-14 09:28:48 [DEBUG] Copied zjl1event.png → F:\KinderSort\OutputNew\xzq\Event__zjl1event_3.png
+2026-08-14 09:28:48 [INFO] Matched zjl1event.png → xzq
+2026-08-14 09:28:49 [DEBUG] Copied zjl2event.png → F:\KinderSort\OutputNew\zjl\Event__zjl2event_3.png
+2026-08-14 09:28:49 [INFO] Matched zjl2event.png → zjl
+2026-08-14 09:28:49 [INFO] Sort complete — total=10 matched=10 unmatched=0 skipped=0
+2026-08-14 09:29:37 [INFO] Loaded reference vector for dzq
+2026-08-14 09:29:38 [INFO] Loaded reference vector for ljj
+2026-08-14 09:29:39 [INFO] Loaded reference vector for xzq
+2026-08-14 09:29:40 [INFO] Loaded reference vector for yl
+2026-08-14 09:29:41 [INFO] Loaded reference vector for zjl
+2026-08-14 09:29:41 [INFO] Starting High-Accuracy AI sort — 10 images found
+2026-08-14 09:29:42 [DEBUG] Copied dzq1event.png → F:\KinderSort\OutputNew\dzq\Event__dzq1event.png
+2026-08-14 09:29:42 [INFO] Matched dzq1event.png → dzq
+2026-08-14 09:29:42 [DEBUG] Copied dzq1event.png → F:\KinderSort\OutputNew\yl\Event__dzq1event.png
+2026-08-14 09:29:42 [INFO] Matched dzq1event.png → yl
+2026-08-14 09:29:42 [DEBUG] Copied dzq2event.png → F:\KinderSort\OutputNew\dzq\Event__dzq2event.png
+2026-08-14 09:29:42 [INFO] Matched dzq2event.png → dzq
+2026-08-14 09:29:43 [DEBUG] Copied ljj1event.png → F:\KinderSort\OutputNew\ljj\Event__ljj1event.png
+2026-08-14 09:29:43 [INFO] Matched ljj1event.png → ljj
+2026-08-14 09:29:44 [DEBUG] Copied ljj2event.png → F:\KinderSort\OutputNew\ljj\Event__ljj2event.png
+2026-08-14 09:29:44 [INFO] Matched ljj2event.png → ljj
+2026-08-14 09:29:44 [DEBUG] Copied xzq1event.png → F:\KinderSort\OutputNew\dzq\Event__xzq1event.png
+2026-08-14 09:29:44 [INFO] Matched xzq1event.png → dzq
+2026-08-14 09:29:44 [DEBUG] Copied xzq1event.png → F:\KinderSort\OutputNew\xzq\Event__xzq1event.png
+2026-08-14 09:29:44 [INFO] Matched xzq1event.png → xzq
+2026-08-14 09:29:45 [DEBUG] Copied xzq2event.png → F:\KinderSort\OutputNew\xzq\Event__xzq2event.png
+2026-08-14 09:29:45 [INFO] Matched xzq2event.png → xzq
+2026-08-14 09:29:47 [DEBUG] Copied yl1event.png → F:\KinderSort\OutputNew\dzq\Event__yl1event.png
+2026-08-14 09:29:47 [INFO] Matched yl1event.png → dzq
+2026-08-14 09:29:47 [DEBUG] Copied yl1event.png → F:\KinderSort\OutputNew\ljj\Event__yl1event.png
+2026-08-14 09:29:47 [INFO] Matched yl1event.png → ljj
+2026-08-14 09:29:47 [DEBUG] Copied yl1event.png → F:\KinderSort\OutputNew\yl\Event__yl1event.png
+2026-08-14 09:29:47 [INFO] Matched yl1event.png → yl
+2026-08-14 09:29:48 [DEBUG] Copied yl2event.png → F:\KinderSort\OutputNew\yl\Event__yl2event.png
+2026-08-14 09:29:48 [INFO] Matched yl2event.png → yl
+2026-08-14 09:29:48 [DEBUG] Copied zjl1event.png → F:\KinderSort\OutputNew\xzq\Event__zjl1event.png
+2026-08-14 09:29:48 [INFO] Matched zjl1event.png → xzq
+2026-08-14 09:29:49 [DEBUG] Copied zjl2event.png → F:\KinderSort\OutputNew\zjl\Event__zjl2event.png
+2026-08-14 09:29:49 [INFO] Matched zjl2event.png → zjl
+2026-08-14 09:29:49 [INFO] Sort complete — total=10 matched=10 unmatched=0 skipped=0
